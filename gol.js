@@ -2,8 +2,12 @@
 
 
 var grid;
-const cols = 10;
-const rows = 10;
+const cols = 100;
+const rows = 100;
+const cellSize = 25;
+const cellPadding = 1;
+const canvasWidth = cols * cellSize;
+const canvasHeight = rows * cellSize;
 var generation = 0;
 var running;
 
@@ -30,8 +34,8 @@ function draw() {
     if (!canvas) {
         // create a canvas
         canvas = document.createElement('canvas');
-        canvas.width = 500;
-        canvas.height = 500;
+        canvas.width = canvasWidth
+        canvas.height = canvasHeight;
         canvas.style.border = '1px solid black';
         document.body.appendChild(canvas);
 
@@ -39,8 +43,8 @@ function draw() {
         canvas.addEventListener('click', (e) => {
             const x = e.offsetX;
             const y = e.offsetY;
-            const i = Math.floor(x / 50);
-            const j = Math.floor(y / 50);
+            const i = Math.floor(x / cellSize);
+            const j = Math.floor(y / cellSize);
             grid[i][j] = grid[i][j] === 1 ? 0 : 1;
             console.log(grid[i][j]);
             drawCells();
@@ -56,10 +60,10 @@ function draw() {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
         for (let i = 0; i < grid.length; i++) {
-            ctx.moveTo(0, i * 50);
-            ctx.lineTo(500, i * 50);
-            ctx.moveTo(i * 50, 0);
-            ctx.lineTo(i * 50, 500);
+            ctx.moveTo(0, i * cellSize);
+            ctx.lineTo(canvasWidth, i * cellSize);
+            ctx.moveTo(i * cellSize, 0);
+            ctx.lineTo(i * cellSize, canvasWidth);
         }
         ctx.stroke();
     }
@@ -71,9 +75,9 @@ function draw() {
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid.length; j++) {
                 if (grid[i][j] === 1) {
-                    ctx.fillRect(i * 50 + 2, j * 50 + 2, 50 - 4, 50 - 4);
+                    ctx.fillRect(i * cellSize + cellPadding, j * cellSize + cellPadding, cellSize - cellPadding * 2, cellSize - cellPadding * 2);
                 } else {
-                    ctx.clearRect(i * 50 + 2, j * 50 + 2, 50 - 4, 50 - 4);
+                    ctx.clearRect(i * cellSize + cellPadding, j * cellSize + cellPadding, cellSize - cellPadding * 2, cellSize - cellPadding * 2);
                 }
             }
         }
@@ -143,6 +147,7 @@ function stop() {
 
 function reset() {
     console.log('reset');
+    stop();
     // reset the game
     grid = create2dArray(cols, rows);
     draw();
