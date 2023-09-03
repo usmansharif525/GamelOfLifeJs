@@ -1,2 +1,3 @@
 # GamelOfLifeJs
-Game of life implementation in js
+
+Simple Game of Life implementation in js
